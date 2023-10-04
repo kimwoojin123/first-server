@@ -1,6 +1,12 @@
 import http.server
+import socketserver
 
-httpd = http.server.HTTPServer(('0.0.0.0', 8080), http.server.SimpleHTTPRequestHandler)
+class CustomHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        self.path = 'index.html'
+        return http.server.SimpleHTTPRequestHandler.do_GET(self)
+PORT = 8080
 
-
-httpd.serve_forever()
+handler = CustomHttpRequestHandler
+server=socketserver.TCPServer(("", PORT), handler)
+server.serve_forever()
